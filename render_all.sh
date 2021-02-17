@@ -1,73 +1,55 @@
 #!/bin/bash
 
+GREEN='\033[0;32m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 RESET='\033[0m'
 
-# ALL FILE NAMES MUST HAVE NO SPACES IN AND MUST BE UNIQUELY NAMED
+photo_format_in=".jpg"
+photo_format_out=".jpg"
+
+video_format_in=".mov"
+video_format_out=".mov"
+
+# ALL FILE NAMES MUST BE UNIQUELY NAMED
+# Try to avoid file names with spaces - else the output name will only include text before the space
 
 echo
-echo -e "${CYAN}*** Starting Portrait Photo Renders ***${RESET}"
+echo -e "${CYAN}*** Starting Photo Renders ***${RESET}"
 echo
 
-# loop through all .jpg images in media/in/photo_in/portrait
-for file in media/in/photo_in/portrait/*.jpg;
+# loop through all .jpg images in media/in/photo_in
+for file in media/in/photo_in/*$photo_format_in;
 do
   # extract base name from path and trim
   basename=$(basename $file)
-  name=${basename%.jpg}
+  name=${basename%$photo_format_in}
 
   # create output file names
-  photo_200x200=""$name"_portrait_200x200.jpg"
-  photo_480x720=""$name"_portrait_480x720.jpg"
-  photo_640x640=""$name"_portrait_640x640.jpg"
-  photo_1280xAR=""$name"_portrait_1280xAR.jpg"
+  photo_200x200=""$name"_portrait_200x200$photo_format_out"
+  photo_480x720=""$name"_portrait_480x720$photo_format_out"
+  photo_720x480=""$name"_landscape_720x480$photo_format_out"
+  photo_640x640=""$name"_portrait_640x640$photo_format_out"
+  photo_1280xAR=""$name"_portrait_1280xAR$photo_format_out"
+  photo_1920xAR=""$name"_landscape_1920xAR$photo_format_out"
 
   # generate photo_200x200 with width and height 200px
   ffmpeg -i "$file" -vf "crop='min(iw,1*ih)':'min(iw/1,ih)',scale=200:200" "media/out/photo_out/$photo_200x200" -n
   # generate photo_480x720 with width 480px and height 720px
   ffmpeg -i "$file" -vf "crop='min(iw,ih/1.5)':'min(1.5*iw,ih)',scale=480:720" "media/out/photo_out/$photo_480x720" -n
-  # generate photo_640x640 with width and height 640px
-  ffmpeg -i "$file" -vf "crop='min(iw,1*ih)':'min(iw/1,ih)',scale=640:640" "media/out/photo_out/$photo_640x640" -n
-  # generate photo_1280xAR with width 1280px
-  ffmpeg -i "$file" -vf "scale=1280:-2" "media/out/photo_out/$photo_1280xAR" -n
-
-
-  # status log
-  echo
-  echo "Photo optimised: $basename"
-
-done
-
-echo
-echo -e "${CYAN}*** Starting Landscape Photo Renders ***${RESET}"
-echo
-
-# loop through all .jpg images in media/in/photo_in/landscape
-for file in media/in/photo_in/landscape/*.jpg;
-do
-  # extract base name from path and trim
-  basename=$(basename $file)
-  name=${basename%.jpg}
-
-  # create output file names
-  photo_200x200=""$name"_landscape_200x200.jpg"
-  photo_720x480=""$name"_landscape_720x480.jpg"
-  photo_640x640=""$name"_landscape_640x640.jpg"
-  photo_1920xAR=""$name"_landscape_1920xAR.jpg"
-
-  # generate photo_200x200 with width and height 200px
-  ffmpeg -i "$file" -vf "crop='min(iw,1*ih)':'min(iw/1,ih)',scale=200:200" "media/out/photo_out/$photo_200x200" -n
   # generate photo_720x480 with width 720px and height 480px
   ffmpeg -i "$file" -vf "crop='min(iw,1.5*ih)':'min(iw/1.5,ih)',scale=720:480" "media/out/photo_out/$photo_720x480" -n
   # generate photo_640x640 with width and height 640px
   ffmpeg -i "$file" -vf "crop='min(iw,1*ih)':'min(iw/1,ih)',scale=640:640" "media/out/photo_out/$photo_640x640" -n
+  # generate photo_1280xAR with width 1280px
+  ffmpeg -i "$file" -vf "scale=1280:-2" "media/out/photo_out/$photo_1280xAR" -n
   # generate photo_1920x1280 with width 1920px and by maintaining the original aspect ratio
   ffmpeg -i "$file" -vf "scale=1920:-2" "media/out/photo_out/$photo_1920xAR" -n
 
+
   # status log
   echo
-  echo "Photo optimised: $basename"
+  echo -e "${GREEN}Photo optimised: $basename${RESET}"
 
 done
 
@@ -75,16 +57,16 @@ echo
 echo -e "${CYAN}*** Starting Video Renders ***${RESET}"
 echo
 
-# loop through all .mov videoa in media/in/video_in
-for file in media/in/video_in/*.mov;
+# loop through all $video_format_in videos in media/in/video_in
+for file in media/in/video_in/*$video_format_in;
 do
 
   # extract base name from path and trim
   basename=$(basename $file)
-  name=${basename%.mov}
+  name=${basename%$video_format_in}
 
-  # create file name
-  video_1920xAR=""$name"_video_1920xAR.mov"
+  # create output file name
+  video_1920xAR=""$name"_video_1920xAR$video_format_out"
 
   # calculate duration of video before alteration
   duration_before=$(ffprobe -i "$file" -show_entries format=duration -v quiet -of csv="p=0" | awk '{print int($0)}' | xargs)
@@ -118,9 +100,9 @@ do
 
   # status log
   echo
-  echo "Video optimised: $basename"
-  echo "Duration before: $duration_before"
-  echo "Duration after: $duration_after"
+  echo -e "${GREEN}Video optimised: $basename"
+  echo -e "Duration before: $duration_before"
+  echo -e "Duration after: $duration_after${RESET}"
   echo
 
 done
