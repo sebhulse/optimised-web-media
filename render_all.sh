@@ -18,7 +18,7 @@ echo
 echo -e "${CYAN}*** Starting Photo Renders ***${RESET}"
 echo
 
-# loop through all .jpg images in media/in/photo_in
+# loop through all $photo_format_in images in media/in/photo_in
 for file in media/in/photo_in/*$photo_format_in;
 do
   # extract base name from path and trim
