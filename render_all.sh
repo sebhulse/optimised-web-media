@@ -5,14 +5,25 @@ PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 RESET='\033[0m'
 
-photo_format_in=".jpg"
-photo_format_out=".jpg"
-
-video_format_in=".mov"
-video_format_out=".mov"
-
 # ALL FILE NAMES MUST BE UNIQUELY NAMED
 # Try to avoid file names with spaces - else the output name will only include text before the space
+
+# *** PARAMETERS ***
+# photo input format
+photo_format_in=".jpg"
+# desired photo output format
+photo_format_out=".jpg"
+
+# video input format
+video_format_in=".mov"
+# desired video output format
+video_format_out=".mov"
+
+# target duration of video clip - seconds ($duration_before and $factor are integers so unless the code is ammended, the target_duration is approximate)
+target_duration=10
+
+# fade duration of video clip - seconds
+fade_duration=1
 
 echo
 echo -e "${CYAN}*** Starting Photo Renders ***${RESET}"
@@ -26,12 +37,12 @@ do
   name=${basename%$photo_format_in}
 
   # create output file names
-  photo_200x200=""$name"_portrait_200x200$photo_format_out"
-  photo_480x720=""$name"_portrait_480x720$photo_format_out"
-  photo_720x480=""$name"_landscape_720x480$photo_format_out"
-  photo_640x640=""$name"_portrait_640x640$photo_format_out"
-  photo_1280xAR=""$name"_portrait_1280xAR$photo_format_out"
-  photo_1920xAR=""$name"_landscape_1920xAR$photo_format_out"
+  photo_200x200=""$name"_200x200$photo_format_out"
+  photo_480x720=""$name"_480x720$photo_format_out"
+  photo_720x480=""$name"_720x480$photo_format_out"
+  photo_640x640=""$name"_640x640$photo_format_out"
+  photo_1280xAR=""$name"_1280xAR$photo_format_out"
+  photo_1920xAR=""$name"_1920xAR$photo_format_out"
 
   # generate photo_200x200 with width and height 200px
   ffmpeg -i "$file" -vf "crop='min(iw,1*ih)':'min(iw/1,ih)',scale=200:200" "media/out/photo_out/$photo_200x200" -n
@@ -73,17 +84,12 @@ do
   # remove white space
   duration_before="${duration_before%"${duration_before##*[![:space:]]}"}"
 
-  # target duration of clip - seconds ($duration_before and $factor are integers so unless the code is ammended, the target_duration is approximate)
-  target_duration=10
-
   # if duration_before > target_duration, determine factor. Else, set the factor to 1 (do not change speed of footage)
   if (( $duration_before > $target_duration )); then
     factor=$(($duration_before / $target_duration))
     else factor=1
   fi
 
-  # fade duration - seconds
-  fade_duration=1
   fade_out=$( expr $duration_before - $fade_duration)
 
   # generate video_1920xAR by performing the following operations:
