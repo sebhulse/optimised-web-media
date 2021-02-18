@@ -1,6 +1,6 @@
 # README
 
-## Automate the Optimisation of Photos and Videos for Web using FFMPEG and Bash
+## Automate and Optimise Your Web Media Delivery Workflow with FFMPEG
 
 This nifty bash script is intended to create lower file size (and lower quality) media - with or without watermarks - for use online where, for example, 20MB jpegs or 5GB video clips aren't welcome. The output files and formats can be adjusted as required by amending the FFMPEG commands.
 
