@@ -9,13 +9,9 @@ RESET='\033[0m'
 # Try to avoid file names with spaces - else the output name will only include text before the space
 
 # *** PARAMETERS ***
-# photo input format
-photo_format_in=".jpg"
 # desired photo output format
 photo_format_out=".jpg"
 
-# video input format
-video_format_in=".mov"
 # desired video output format
 video_format_out=".mov"
 
@@ -30,11 +26,11 @@ echo -e "${CYAN}*** Starting Photo Renders ***${RESET}"
 echo
 
 # loop through all $photo_format_in images in media/in/photo_in
-for file in media/in/photo_in/*$photo_format_in;
+for file in media/in/photo_in/*;
 do
   # extract base name from path and trim
   basename=$(basename $file)
-  name=${basename%$photo_format_in}
+  name=${basename%.*}
 
   # create output file names
   photo_200x200=""$name"_200x200$photo_format_out"
@@ -69,12 +65,12 @@ echo -e "${CYAN}*** Starting Video Renders ***${RESET}"
 echo
 
 # loop through all $video_format_in videos in media/in/video_in
-for file in media/in/video_in/*$video_format_in;
+for file in media/in/video_in/*;
 do
 
   # extract base name from path and trim
   basename=$(basename $file)
-  name=${basename%$video_format_in}
+  name=${basename%.*}
 
   # create output file name
   video_1920xAR=""$name"_video_1920xAR$video_format_out"
