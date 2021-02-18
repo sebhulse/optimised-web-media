@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# set console output 
 GREEN='\033[0;32m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
