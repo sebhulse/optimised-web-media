@@ -4,7 +4,7 @@
 
 This nifty bash script is intended to create lower file size (and lower quality) media - with or without watermarks - for use online where, for example, 20MB jpegs or 5GB video clips aren't welcome. The output files and formats can be adjusted as required by amending the FFMPEG commands.
 
-See this blog post for a comprehensive overview of the FFMPEG commands, how to adjust them to your needs and for photo and video examples!
+[See this blog post](https://sebhulse.medium.com/automate-and-optimise-your-web-media-delivery-workflow-with-ffmpeg-73f9853b87c7) for a comprehensive overview of the FFMPEG commands, how to adjust them to your needs and for photo and video examples!
 
 ## Output
 
