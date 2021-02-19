@@ -36,7 +36,7 @@ The video render also does the following:
 
 To use this tool: 
 
-**First,** install FFMPEG:
+**First,** [install FFMPEG](http://ffmpeg.org/download.html):
 
 Using Git (recommended):
 
@@ -48,12 +48,6 @@ Or, on MacOS with brew:
 
 ```bash
 brew install ffmpeg
-```
-
-Or, on Linux with pip:
-
-```bash
-sudo apt-get install ffmpeg
 ```
 
 **Second,** clone this git repository or download the ZIP and locate it to a suitable location.
